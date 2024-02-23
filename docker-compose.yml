@@ -1,0 +1,23 @@
+version: '3.9'
+
+secrets:
+  db_password:
+    file: docker-secrets/files/db_password.txt
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
