@@ -57,4 +57,13 @@ public class UserRepositoryIntegrationTests {
         assertThat(result).isPresent();
         assertThat(result.get()).isEqualTo(user);
     }
+
+    @Test
+    public void testThatUserCanBeDeleted() {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        underTest.save(user);
+        underTest.deleteById(user.getId());
+        Optional<UserEntity> result = underTest.findById(user.getId());
+        assertThat(result).isEmpty();
+    }
 }
