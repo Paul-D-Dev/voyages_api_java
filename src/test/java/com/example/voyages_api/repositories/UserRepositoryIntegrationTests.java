@@ -45,6 +45,16 @@ public class UserRepositoryIntegrationTests {
         assertThat(result)
                 .hasSize(2)
                 .containsExactly(userA, userB);
+    }
 
+    @Test
+    public void testThatUserCanBeUpdated() {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        underTest.save(user);
+        user.setName("Robert");
+        underTest.save(user);
+        Optional<UserEntity> result = underTest.findById(user.getId());
+        assertThat(result).isPresent();
+        assertThat(result.get()).isEqualTo(user);
     }
 }
