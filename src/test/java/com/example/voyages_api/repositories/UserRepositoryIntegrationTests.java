@@ -34,4 +34,17 @@ public class UserRepositoryIntegrationTests {
         assertThat(result.get()).isEqualTo(user);
     }
 
+
+    @Test
+    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+        UserEntity userA = TestDataUtil.createTestUserEntityA();
+        underTest.save(userA);
+        UserEntity userB = TestDataUtil.createTestUserEntityB();
+        underTest.save(userB);
+        Iterable<UserEntity> result = underTest.findAll();
+        assertThat(result)
+                .hasSize(2)
+                .containsExactly(userA, userB);
+
+    }
 }
