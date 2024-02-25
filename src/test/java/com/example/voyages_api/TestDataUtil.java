@@ -12,4 +12,12 @@ public class TestDataUtil {
                 .name("Georges")
                 .build();
     }
+
+    public static UserEntity createTestUserEntityB() {
+        return UserEntity.builder()
+                .id(2L)
+                .name("Albert")
+                .build();
+    }
+
 }
