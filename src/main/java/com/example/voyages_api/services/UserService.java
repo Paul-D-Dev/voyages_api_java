@@ -9,4 +9,8 @@ public interface UserService {
     UserEntity create(UserEntity user);
 
     Optional<UserEntity> findOne(Long id);
+
+    Boolean isExists(Long id);
+
+    UserEntity partialUpdate(Long id, UserEntity user);
 }

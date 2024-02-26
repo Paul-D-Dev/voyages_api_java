@@ -1,6 +1,7 @@
 package com.example.voyages_api.controllers;
 
 import com.example.voyages_api.TestDataUtil;
+import com.example.voyages_api.domain.dto.UserDto;
 import com.example.voyages_api.domain.entities.UserEntity;
 import com.example.voyages_api.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,7 +97,7 @@ public class UserControllerIntegrationTests {
     }
 
     @Test
-    public void TestThatFoundUserFailedAndReturnsHttpStatus404WhenNoUserExists() throws Exception {
+    public void testThatFoundUserFailedAndReturnsHttpStatus404WhenNoUserExists() throws Exception {
         mvc.perform(
                 MockMvcRequestBuilders.get("/users/403")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -104,4 +105,65 @@ public class UserControllerIntegrationTests {
                 MockMvcResultMatchers.status().isNotFound()
         );
     }
+
+    @Test
+    public void testThatPartialUpdatedExistingUserReturnHttpStatus200() throws Exception {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        UserEntity savedUser = service.create(user);
+
+        UserDto testUserDto = TestDataUtil.createTestUserDtoA();
+        testUserDto.setName("Robert");
+        String testUserJson = objectMapper.writeValueAsString(testUserDto);
+
+        mvc.perform(
+                MockMvcRequestBuilders.patch("/users/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testUserJson)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdatedExistingUserReturnUpdatedUser() throws Exception {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        UserEntity savedUser = service.create(user);
+
+        UserDto testUserDto = TestDataUtil.createTestUserDtoA();
+        testUserDto.setName("Robert");
+        String testUserJson = objectMapper.writeValueAsString(testUserDto);
+
+        mvc.perform(
+                MockMvcRequestBuilders.patch("/users/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testUserJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedUser.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Robert")
+        );
+    }
+
+    //    TODO update this test return http status is not modified
+    @Test
+    public void testThatPartialUpdatedReturnSavedUser() throws Exception {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        UserEntity savedUser = service.create(user);
+
+        UserDto testUserDto = TestDataUtil.createTestUserDtoA();
+        testUserDto.setName(null);
+
+        String testUserJson = objectMapper.writeValueAsString(testUserDto);
+
+        mvc.perform(
+                MockMvcRequestBuilders.patch("/users/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(testUserJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").value(savedUser.getId())
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Georges")
+        );
+    }
+
 }

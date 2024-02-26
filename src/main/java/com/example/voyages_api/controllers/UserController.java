@@ -39,4 +39,18 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PatchMapping(path = "/users/{id}")
+    public ResponseEntity<UserDto> partialUpdate(
+            @PathVariable("id") Long id,
+            @RequestBody UserDto userDto
+    ) {
+        if (!service.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        UserEntity userEntity = mapper.mapFrom(userDto);
+        UserEntity updatedUser = service.partialUpdate(id, userEntity);
+        return new ResponseEntity<>(mapper.mapTo(updatedUser), HttpStatus.OK);
+    }
+
 }

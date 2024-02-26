@@ -25,4 +25,19 @@ public class UserServiceImpl implements UserService {
     public Optional<UserEntity> findOne(Long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public Boolean isExists(Long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
+    public UserEntity partialUpdate(Long id, UserEntity user) {
+        user.setId(id);
+
+        return repository.findById(id).map(foundUser -> {
+            Optional.ofNullable(user.getName()).ifPresent(foundUser::setName);
+            return repository.save(foundUser);
+        }).orElseThrow(() -> new RuntimeException("User does not exist"));
+    }
 }
