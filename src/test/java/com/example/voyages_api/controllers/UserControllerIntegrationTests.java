@@ -45,4 +45,21 @@ public class UserControllerIntegrationTests {
                 MockMvcResultMatchers.status().isCreated()
         );
     }
+
+    @Test
+    public void testThatCreateUserSuccessfullyReturnsUserSaved() throws Exception {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        user.setId(null);
+        String userJson = objectMapper.writeValueAsString(user);
+
+        mvc.perform(
+                MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson)
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.name").value("Georges")
+        );
+    }
 }
