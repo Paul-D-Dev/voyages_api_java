@@ -7,9 +7,9 @@ import com.example.voyages_api.services.UserService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @Log
@@ -28,6 +28,15 @@ public class UserController {
         UserEntity userEntity = mapper.mapFrom(user);
         UserEntity savedUserEntity = service.create(userEntity);
         return new ResponseEntity<>(mapper.mapTo(savedUserEntity), HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/users/{id}")
+    public ResponseEntity<UserDto> getOne(@PathVariable("id") Long id) {
+        Optional<UserEntity> foundUser = service.findOne(id);
+        return foundUser.map(userEntity -> {
+            UserDto userDto = mapper.mapTo(userEntity);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 }
