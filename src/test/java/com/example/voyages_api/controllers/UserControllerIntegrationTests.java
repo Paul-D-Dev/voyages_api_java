@@ -166,4 +166,26 @@ public class UserControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatDeleteOneReturnsHttpStatus200() throws Exception {
+        UserEntity user = TestDataUtil.createTestUserEntityA();
+        UserEntity savedUser = service.create(user);
+
+        mvc.perform(
+                MockMvcRequestBuilders.delete("/users/" + savedUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+    @Test
+    public void testThatDeleteOneReturnsHttpStatus404IfUserNotFound() throws Exception {
+        mvc.perform(
+                MockMvcRequestBuilders.delete("/users/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNotFound()
+        );
+    }
 }
