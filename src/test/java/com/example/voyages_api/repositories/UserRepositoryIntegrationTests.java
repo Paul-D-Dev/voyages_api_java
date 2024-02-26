@@ -36,7 +36,7 @@ public class UserRepositoryIntegrationTests {
 
 
     @Test
-    public void testThatMultipleAuthorsCanBeCreatedAndRecalled() {
+    public void testThatMultipleUsersCanBeCreatedAndRecalled() {
         UserEntity userA = TestDataUtil.createTestUserEntityA();
         underTest.save(userA);
         UserEntity userB = TestDataUtil.createTestUserEntityB();
