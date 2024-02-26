@@ -15,7 +15,6 @@ public class UserMapper implements Mapper<UserEntity, UserDto> {
         this.modelMapper = modelMapper;
     }
 
-
     @Override
     public UserDto mapTo(UserEntity userEntity) {
         return modelMapper.map(userEntity, UserDto.class);
