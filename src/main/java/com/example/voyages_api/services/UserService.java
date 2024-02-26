@@ -14,5 +14,5 @@ public interface UserService {
 
     UserEntity partialUpdate(Long id, UserEntity user);
 
-    void deleteOne(Long id);
+    void delete(Long id);
 }

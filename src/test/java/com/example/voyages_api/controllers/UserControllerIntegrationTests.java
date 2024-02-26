@@ -167,7 +167,7 @@ public class UserControllerIntegrationTests {
     }
 
     @Test
-    public void testThatDeleteOneReturnsHttpStatus200() throws Exception {
+    public void testThatDeleteOneReturnsHttpStatus204ForExistingUser() throws Exception {
         UserEntity user = TestDataUtil.createTestUserEntityA();
         UserEntity savedUser = service.create(user);
 
@@ -175,7 +175,7 @@ public class UserControllerIntegrationTests {
                 MockMvcRequestBuilders.delete("/users/" + savedUser.getId())
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.status().isOk()
+                MockMvcResultMatchers.status().isNoContent()
         );
     }
 
