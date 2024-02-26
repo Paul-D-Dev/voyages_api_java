@@ -1,5 +1,6 @@
 package com.example.voyages_api;
 
+import com.example.voyages_api.domain.dto.UserDto;
 import com.example.voyages_api.domain.entities.UserEntity;
 
 public class TestDataUtil {
@@ -17,6 +18,13 @@ public class TestDataUtil {
         return UserEntity.builder()
                 .id(2L)
                 .name("Albert")
+                .build();
+    }
+
+    public static UserDto createTestUserDtoA() {
+        return UserDto.builder()
+                .id(1L)
+                .name("Georges")
                 .build();
     }
 
