@@ -40,4 +40,9 @@ public class UserServiceImpl implements UserService {
             return repository.save(foundUser);
         }).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
+
+    @Override
+    public void deleteOne(Long id) {
+        repository.deleteById(id);
+    }
 }

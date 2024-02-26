@@ -53,4 +53,13 @@ public class UserController {
         return new ResponseEntity<>(mapper.mapTo(updatedUser), HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/users/{id}")
+    public ResponseEntity<UserDto> delete(@PathVariable("id") Long id) {
+        if (!service.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
