@@ -64,7 +64,15 @@ public class UserControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Georges")
+                MockMvcResultMatchers.jsonPath("$.firstname").value("Georges")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.lastname").value("Washington")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.email").value("gw@mail.com")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.createdDate").isNotEmpty()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.updatedDate").isNotEmpty()
         );
     }
 
@@ -82,7 +90,7 @@ public class UserControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetAuthorReturnsAuthorWhenAuthorExists() throws Exception {
+    public void testThatGetAuthorReturnsAuthorWhenUserExists() throws Exception {
         UserEntity user = TestDataUtil.createTestUserEntityA();
         service.create(user);
 
@@ -92,7 +100,15 @@ public class UserControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").value(1)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Georges")
+                MockMvcResultMatchers.jsonPath("$.firstname").value("Georges")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.lastname").value("Washington")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.email").value("gw@mail.com")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.createdDate").isNotEmpty()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.updatedDate").isNotEmpty()
         );
     }
 
@@ -112,7 +128,7 @@ public class UserControllerIntegrationTests {
         UserEntity savedUser = service.create(user);
 
         UserDto testUserDto = TestDataUtil.createTestUserDtoA();
-        testUserDto.setName("Robert");
+        testUserDto.setFirstname("Robert");
         String testUserJson = objectMapper.writeValueAsString(testUserDto);
 
         mvc.perform(
@@ -130,7 +146,9 @@ public class UserControllerIntegrationTests {
         UserEntity savedUser = service.create(user);
 
         UserDto testUserDto = TestDataUtil.createTestUserDtoA();
-        testUserDto.setName("Robert");
+        testUserDto.setFirstname("Robert");
+        testUserDto.setLastname("John");
+        testUserDto.setEmail("rj@mail.com");
         String testUserJson = objectMapper.writeValueAsString(testUserDto);
 
         mvc.perform(
@@ -140,7 +158,15 @@ public class UserControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").value(savedUser.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Robert")
+                MockMvcResultMatchers.jsonPath("$.firstname").value("Robert")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.lastname").value("John")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.email").value("rj@mail.com")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.createdDate").isNotEmpty()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.updatedDate").isNotEmpty()
         );
     }
 
@@ -151,7 +177,7 @@ public class UserControllerIntegrationTests {
         UserEntity savedUser = service.create(user);
 
         UserDto testUserDto = TestDataUtil.createTestUserDtoA();
-        testUserDto.setName(null);
+        testUserDto.setFirstname(null);
 
         String testUserJson = objectMapper.writeValueAsString(testUserDto);
 
@@ -162,7 +188,15 @@ public class UserControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").value(savedUser.getId())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("Georges")
+                MockMvcResultMatchers.jsonPath("$.firstname").value("Georges")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.lastname").value("Washington")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.email").value("gw@mail.com")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.createdDate").isNotEmpty()
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.updatedDate").isNotEmpty()
         );
     }
 

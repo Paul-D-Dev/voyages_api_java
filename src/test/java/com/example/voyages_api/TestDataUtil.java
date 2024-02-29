@@ -10,21 +10,27 @@ public class TestDataUtil {
     public static UserEntity createTestUserEntityA() {
         return UserEntity.builder()
                 .id(1L)
-                .name("Georges")
+                .firstName("Georges")
+                .lastName("Washington")
+                .email("gw@mail.com")
                 .build();
     }
 
     public static UserEntity createTestUserEntityB() {
         return UserEntity.builder()
                 .id(2L)
-                .name("Albert")
+                .firstName("Albert")
+                .lastName("Smith")
+                .email("as@mail.com")
                 .build();
     }
 
     public static UserDto createTestUserDtoA() {
         return UserDto.builder()
                 .id(1L)
-                .name("Georges")
+                .firstname("Georges")
+                .lastname("Washington")
+                .email("gw@mail.com")
                 .build();
     }
 

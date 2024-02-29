@@ -12,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -29,9 +30,15 @@ public class UserRepositoryIntegrationTests {
     public void testThatUserCanBeCreatedAndeRecalled() {
         UserEntity user = TestDataUtil.createTestUserEntityA();
         underTest.save(user);
-        Optional<UserEntity> result = underTest.findById(user.getId());
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(user);
+        Optional<UserEntity> userResult = underTest.findById(user.getId());
+        assertThat(userResult).isPresent();
+
+        UserEntity result = userResult.get();
+        assertThat(result.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(result.getLastName()).isEqualTo(user.getLastName());
+        assertThat(result.getEmail()).isEqualTo(user.getEmail());
+
+        assertThat(result.getCreatedDate()).isEqualTo(result.getUpdatedDate());
     }
 
 
@@ -44,18 +51,27 @@ public class UserRepositoryIntegrationTests {
         Iterable<UserEntity> result = underTest.findAll();
         assertThat(result)
                 .hasSize(2)
-                .containsExactly(userA, userB);
+                .hasOnlyElementsOfType(UserEntity.class)
+                .allSatisfy(savedUser -> assertThat(savedUser.getCreatedDate()).isEqualTo(savedUser.getUpdatedDate()))
+                .map(UserEntity::getId, UserEntity::getFirstName, UserEntity::getLastName, UserEntity::getEmail)
+                .contains(
+                        tuple(userA.getId(), userA.getFirstName(), userA.getLastName(), userA.getEmail()),
+                        tuple(userB.getId(), userB.getFirstName(), userB.getLastName(), userB.getEmail())
+                );
     }
 
     @Test
     public void testThatUserCanBeUpdated() {
         UserEntity user = TestDataUtil.createTestUserEntityA();
         underTest.save(user);
-        user.setName("Robert");
+        user.setFirstName("Robert");
         underTest.save(user);
-        Optional<UserEntity> result = underTest.findById(user.getId());
-        assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(user);
+        Optional<UserEntity> userResult = underTest.findById(user.getId());
+        assertThat(userResult).isPresent();
+
+        UserEntity result = userResult.get();
+        assertThat(result.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(result.getUpdatedDate()).isAfter(result.getCreatedDate());
     }
 
     @Test
