@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/users")
 @Log
 public class UserController {
 
@@ -23,14 +24,14 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    @PostMapping(path = "/users")
+    @PostMapping()
     public ResponseEntity<UserDto> create(@RequestBody UserDto user) {
         UserEntity userEntity = mapper.mapFrom(user);
         UserEntity savedUserEntity = service.create(userEntity);
         return new ResponseEntity<>(mapper.mapTo(savedUserEntity), HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/users/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<UserDto> getOne(@PathVariable("id") Long id) {
         Optional<UserEntity> foundUser = service.findOne(id);
         return foundUser.map(userEntity -> {
@@ -39,7 +40,7 @@ public class UserController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PatchMapping(path = "/users/{id}")
+    @PatchMapping(path = "/{id}")
     public ResponseEntity<UserDto> partialUpdate(
             @PathVariable("id") Long id,
             @RequestBody UserDto userDto
@@ -53,7 +54,7 @@ public class UserController {
         return new ResponseEntity<>(mapper.mapTo(updatedUser), HttpStatus.OK);
     }
 
-    @DeleteMapping(path = "/users/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<UserDto> delete(@PathVariable("id") Long id) {
         if (!service.isExists(id)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
