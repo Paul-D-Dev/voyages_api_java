@@ -36,7 +36,9 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
 
         return repository.findById(id).map(foundUser -> {
-            Optional.ofNullable(user.getName()).ifPresent(foundUser::setName);
+            Optional.ofNullable(user.getFirstName()).ifPresent(foundUser::setFirstName);
+            Optional.ofNullable(user.getLastName()).ifPresent(foundUser::setLastName);
+            Optional.ofNullable(user.getEmail()).ifPresent(foundUser::setEmail);
             return repository.save(foundUser);
         }).orElseThrow(() -> new RuntimeException("User does not exist"));
     }
